@@ -1,0 +1,2 @@
+1.问题：使用ObjectOutputStream输出Request时报没有序列化异常，原因是：ClientThread类没有序列化，解决方案：遍历将ClientThread类的ClientName取出放到一个List<String>中，再将List<String>放入Request里.
+2.问题：对象序列化时,抛出java.io.StreamCorruptedException: invalid type code: AC异常。原因是：任何一个文件都有文件头(header)和文件体(body),java在以追加的方式写一个文件时,他每次都会向文件追加一个header,该header是无法识别的,所以会抛出该异常。解决方案：自己写一个java.io.ObjectOutputStream类的子类，该类重写了父类中的writeStreamHeader()方法,该方法用于写入header信息,这里让他不进行任何操作,其他的全部使用父类的方法。
